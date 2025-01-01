@@ -24,9 +24,14 @@ class WifiManager:
     def get_connection(self):
         """return a working WLAN(STA_IF) instance or None"""
 
+        # FIXME/TODO force disconnect
         # First check if there already is any connection:
         if wlan_sta.isconnected():
             return wlan_sta
+        mac = wlan_ap.config('mac')
+        print('MAC %r' % (mac,))
+        self.hostname = network.hostname() + '_' + mac[-2:].hex()  # try and get a unique hostname. TODO more digits?
+        network.hostname(self.hostname)
 
         connected = False
         try:
