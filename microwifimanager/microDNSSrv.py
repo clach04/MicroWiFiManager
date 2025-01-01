@@ -141,7 +141,7 @@ class MicroDNSSrv :
                                     ipB = self._domList.get(domChk, None)
                                     break
                         if not ipB :
-                            print(f"Rerouting to: {ipB}")
+                            #print(f"Rerouting {domName} to: {ipB}")  # DEBUG verbose
                             ipB = self._domList.get('*', None)
                             
                     if ipB :
