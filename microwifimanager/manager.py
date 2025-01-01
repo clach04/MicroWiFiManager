@@ -167,11 +167,26 @@ class WifiManager:
                 print("URL is {}".format(url))
 
 
+                # TODO see if can trigger login to network on phone/PC
                 # TODO getting "generate_204 as address"
-                if url == "configure":
+                if url == "configure" or url == "/configure":
                     handle_configure(client, request)
-                else:
-                    handle_root(client)
+                if url == "setup" or url == "/setup":
+                    handle_setup(client)
+                else:  # including; url == "" or url == "/"
+                    # TODO consider scan seperate from form - so manually request rescan
+                    send_response(client,
+                        '''<html>
+<head>
+<title>WiFi Manager</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+</head>
+<center>
+404</br><a href="http://clock/setup">Setup http://clock/setup</a></br>
+</center></html>''',  # FIXME actual hostname/IP Address
+                        status_code=404)
 
             finally:
                 client.close()
@@ -230,19 +245,19 @@ def send_response(client, payload, status_code=200):
     client.close()
 
 
-def handle_root(client):
+def handle_setup(client):
     try:
         wlan_sta.active(True)
         ssids = sorted(ssid.decode('utf-8') for ssid, *_ in wlan_sta.scan())
         send_header(client)
         client.sendall("""\
             <html>
-    <head>
-        <title>WiFi Manager</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="data:,">
-    </head>
+<head>
+    <title>WiFi Manager</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+</head>
                 <h1 style="color: #5e9ca0; text-align: center;">
                     <span style="color: #ff0000;">
                         Wi-Fi Client Setup
@@ -301,23 +316,23 @@ def handle_configure(client, request):
 
     if do_connect(ssid, password):
         response = """\
-            <html>
-    <head>
-        <title>WiFi Manager</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="data:,">
-    </head>
-                <center>
-                    <br><br>
-                    <h1 style="color: #5e9ca0; text-align: center;">
-                        <span style="color: #00ff00;">
-                            ESP successfully connected to WiFi network %(ssid)s.
-                        </span>
-                    </h1>
-                    <br><br>
-                </center>
-            </html>
+<html>
+<head>
+    <title>WiFi Manager</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+</head>
+    <center>
+        <br><br>
+        <h1 style="color: #5e9ca0; text-align: center;">
+            <span style="color: #00ff00;">
+                ESP successfully connected to WiFi network %(ssid)s.
+            </span>
+        </h1>
+        <br><br>
+    </center>
+</html>
         """ % dict(ssid=ssid)
         send_response(client, response)
         try:
@@ -332,25 +347,25 @@ def handle_configure(client, request):
         return True
     else:
         response = """\
-            <html>
+<html>
     <head>
         <title>WiFi Manager</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="data:,">
     </head>
-                <center>
-                    <h1 style="color: #5e9ca0; text-align: center;">
-                        <span style="color: #ff0000;">
-                            ESP could not connect to WiFi network %(ssid)s.
-                        </span>
-                    </h1>
-                    <br><br>
-                    <form>
-                        <input type="button" value="Go back!" onclick="history.back()"></input>
-                    </form>
-                </center>
-            </html>
-        """ % dict(ssid=ssid)
+    <center>
+        <h1 style="color: #5e9ca0; text-align: center;">
+            <span style="color: #ff0000;">
+                ESP could not connect to WiFi network %(ssid)s.
+            </span>
+        </h1>
+        <br><br>
+        <form>
+            <input type="button" value="Go back!" onclick="history.back()"></input>
+        </form>
+    </center>
+</html>
+""" % dict(ssid=ssid)
         send_response(client, response)
         return False
