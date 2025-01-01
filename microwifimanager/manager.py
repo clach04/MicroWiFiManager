@@ -203,6 +203,12 @@ def handle_root(client):
         send_header(client)
         client.sendall("""\
             <html>
+    <head>
+        <title>WiFi Manager</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="data:,">
+    </head>
                 <h1 style="color: #5e9ca0; text-align: center;">
                     <span style="color: #ff0000;">
                         Wi-Fi Client Setup
@@ -262,6 +268,12 @@ def handle_configure(client, request):
     if do_connect(ssid, password):
         response = """\
             <html>
+    <head>
+        <title>WiFi Manager</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="data:,">
+    </head>
                 <center>
                     <br><br>
                     <h1 style="color: #5e9ca0; text-align: center;">
@@ -287,6 +299,12 @@ def handle_configure(client, request):
     else:
         response = """\
             <html>
+    <head>
+        <title>WiFi Manager</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="data:,">
+    </head>
                 <center>
                     <h1 style="color: #5e9ca0; text-align: center;">
                         <span style="color: #ff0000;">
