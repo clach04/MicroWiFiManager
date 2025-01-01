@@ -75,7 +75,7 @@ class WifiManager:
 
     
     def start(self, port=80):
-
+        print('Starting DNS and web server')
         addr = socket.getaddrinfo('0.0.0.0', port)[0][-1]
 
         self.stop()
@@ -88,6 +88,8 @@ class WifiManager:
         self.server_socket = socket.socket()
         self.server_socket.bind(addr)
         self.server_socket.listen(1)
+        print('IP details %r' % (wlan_ap.ifconfig(),))
+
 
         #mdns = MicroDNSSrv.Create({ '*' : self.ap_ipaddr })
         hostname = 'clock'
