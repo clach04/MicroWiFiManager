@@ -11,6 +11,7 @@ wlan_ap = network.WLAN(network.AP_IF)
 wlan_sta = network.WLAN(network.STA_IF)
 
 class WifiManager:
+    ap_ipaddr = '192.168.4.1'  # wlan_ap.ifconfig()[0]  # TODO?
 
     # authmodes: 0=open, 1=WEP, 2=WPA-PSK, 3=WPA2-PSK, 4=WPA/WPA2-PSK
     def __init__(self, ssid='WifiManager', password='', authmode=0):
@@ -87,7 +88,21 @@ class WifiManager:
         self.server_socket.bind(addr)
         self.server_socket.listen(1)
 
-        mdns = MicroDNSSrv.Create({ '*' : '192.168.4.1' })
+        #mdns = MicroDNSSrv.Create({ '*' : self.ap_ipaddr })
+        hostname = 'clock'
+        mdns = MicroDNSSrv.Create({
+            hostname: self.ap_ipaddr,
+            self.hostname: self.ap_ipaddr,
+
+            'connectivitycheck.gstatic.com': self.ap_ipaddr,
+            'detectportal.firefox.com': self.ap_ipaddr,
+            'example.org': self.ap_ipaddr,
+            '*.google.com': self.ap_ipaddr,
+            'google.com': self.ap_ipaddr,
+            'captive.apple.com': self.ap_ipaddr,
+            'www.msftncsi.com': self.ap_ipaddr,
+            'www.msftconnecttest.com': self.ap_ipaddr,
+        })
 
         print('Connect to WiFi ssid ' + self.ssid + ', default password: ' + self.password)
         print('and open browser window (captive portal should redirect)')
