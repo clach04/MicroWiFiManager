@@ -5,7 +5,11 @@ import time
 import errno
 from microwifimanager.microDNSSrv import MicroDNSSrv
 
+# wifi.dat and semi-colon (';') is compatible with other Wifi Manager implementations
 NETWORK_PROFILES = 'wifi.dat'
+NETWORK_PROFILE_SEPERATOR = ';'  # FIXME ';' (semi-colon) is a valid character for SSIDs :-( Use TAB instead? https://community.cisco.com/t5/wireless-mobility-knowledge-base/characteristics-of-ssids/ta-p/3131765
+# Original SSID standard; A valid SSID is 0-32 octets with arbitrary contents. A 0-length SSID indicates the wildcard SSID (in probe request frames for instance). no character set associated with the SSID - a 32-byte string of NUL-bytes is a valid SSID.
+# later standards suggest/use utf-8
 
 wlan_ap = network.WLAN(network.AP_IF)
 wlan_sta = network.WLAN(network.STA_IF)
@@ -171,7 +175,7 @@ def read_profiles():
         lines = f.readlines()
     profiles = {}
     for line in lines:
-        ssid, password = line.strip("\n").split(";")
+        ssid, password = line.strip("\n").split(NETWORK_PROFILE_SEPERATOR)
         profiles[ssid] = password
     return profiles
 
@@ -179,7 +183,7 @@ def read_profiles():
 def write_profiles(profiles):
     lines = []
     for ssid, password in profiles.items():
-        lines.append("%s;%s\n" % (ssid, password))
+        lines.append("%s%s%s\n" % (ssid, NETWORK_PROFILE_SEPERATOR, password))
     with open(NETWORK_PROFILES, "w") as f:
         f.write(''.join(lines))
 
