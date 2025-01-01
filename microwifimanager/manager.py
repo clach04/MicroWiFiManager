@@ -152,6 +152,13 @@ class WifiManager:
                 if "HTTP" not in request:  # skip invalid requests
                     continue
 
+
+
+                print("request: %r" % (request,))
+                #if self.ap_ipaddr not in request:
+                if ('Host: ' + self.ap_ipaddr) not in request and ('Host: ' + hostname) not in request and ('Host: ' + self.hostname) not in request:
+                    # skip it, something is trying to get access to something else
+                    continue
                 # version 1.9 compatibility
                 try:
                     url = ure.search("(?:GET|POST) /(.*?)(?:\\?.*?)? HTTP", request).group(1).decode("utf-8").rstrip("/")
