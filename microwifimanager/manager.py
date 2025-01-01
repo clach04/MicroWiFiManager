@@ -277,7 +277,7 @@ def handle_configure(client, request):
                 <center>
                     <br><br>
                     <h1 style="color: #5e9ca0; text-align: center;">
-                        <span style="color: #ff0000;">
+                        <span style="color: #00ff00;">
                             ESP successfully connected to WiFi network %(ssid)s.
                         </span>
                     </h1>
