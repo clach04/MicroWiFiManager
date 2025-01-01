@@ -19,6 +19,7 @@ class WifiManager:
         self.password = password
         self.authmode = authmode
         self.server_socket = None
+        self.hostname = 'hostname_notset'
 
     def get_connection(self):
         """return a working WLAN(STA_IF) instance or None"""
