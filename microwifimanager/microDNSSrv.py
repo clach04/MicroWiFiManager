@@ -1,6 +1,6 @@
 """
 The MIT License (MIT)
-Copyright © 2018 Jean-Christophe Bos & HC² (www.hc2.fr)
+Copyright (c) 2018 Jean-Christophe Bos & HC2 (www.hc2.fr)
 """
 
 from   _thread import start_new_thread
