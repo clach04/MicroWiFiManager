@@ -198,7 +198,7 @@ def do_connect(ssid, password):
         connected = wlan_sta.isconnected()
         if connected:
             break
-        time.sleep(0.1)
+        time.sleep(0.1)  # FIXME use MicroPython sleep_XY()
         print('.', end='')
     if connected:
         print('\nConnected. Network config: ', wlan_sta.ifconfig())
